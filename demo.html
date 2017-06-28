@@ -1,0 +1,76 @@
+<html ng-app="imageuploadDemo">
+    <head>
+        <title>imageupload Demo</title>
+    </head>
+    <body ng-controller="DemoCtrl">
+    <form name="contactform">  
+        
+        <h2>Multiple images with resizing</h2>
+        <div> 
+            <label for="inputImage4">Image 4</label>
+
+            <input id="inputImage4" 
+                type="file" 
+                accept="image/*" 
+                multiple
+                image="images4" 
+                resize-max-height="842"
+                resize-max-width="595"
+                resize-quality="1" />
+            
+           <!--  <p>Originals</p>
+            <img ng-repeat="img in images4" ng-src="{{img.url}}" type="{{img.file.type}}"/> -->
+            <p>Resized</p>
+            <img ng-repeat="img in images4" ng-src="{{img.resized.dataURL}}" />
+            <button type="button" ng-click="print()">Add</button>
+            <button type="submit" ng-click="blablabla(images4)" >Submit</button>
+        </div>
+        <hr />
+    </form>  
+    
+    
+    <img ng-src="{{uploadedImgSrc}}" />
+    </body>
+    <script src="javascripts/angular.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+          angular.module('imageuploadDemo', ['imageupload'])
+            .controller('DemoCtrl', function($scope) {
+                $scope.data=[];
+                $scope.print=function(){console.log(images4[0]);}
+                $scope.appendFiles=function(images4){
+                    for(var i =0;i<images4.length;i++){
+                        $scope.data.push(images4[i]);
+                    }
+                    console.log($scope.data);
+
+                }
+
+
+                $scope.blablabla=function(noel){
+                        
+                        console.log($scope.images4);
+                        var def={
+                            content:[]
+                        };
+                        for(var i=0;i<noel.length;i++){
+                            console.log(i);
+                            var data={
+                                image:noel[i].resized.dataURL,
+                                fit:[560,800],
+                                pageBreak:'after'
+                            };
+                            def.content.push(data);
+                        }
+                    //console.log(def);
+                    pdfMake.createPdf(def).download("noelAUGSUTI.pdf");
+                 };
+             });
+            
+    </script>
+    <script src="javascripts/imageupload.js" type="text/javascript"></script>
+         <script src="/pdfmake/build/pdfmake.min.js"></script>
+    <script src="/pdfmake/build/vfs_fonts.js"></script>
+
+   
+
+</html>
